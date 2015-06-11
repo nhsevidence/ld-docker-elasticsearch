@@ -1,7 +1,7 @@
 FROM nice/ld-docker-app
 MAINTAINER Ryan Roberts <ryansroberts@gmail.com>
 
-RUN apt-get install -yy default-jre wget
+RUN apt-get update && apt-get install -yy default-jre wget
 
 ENV ES_PKG_NAME elasticsearch-1.5.0
 
