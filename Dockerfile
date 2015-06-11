@@ -14,13 +14,13 @@ RUN \
   mv /$ES_PKG_NAME /elasticsearch
 
 # Define mountable directories.
-VOLUME ["/data"]
+VOLUME ["/elastic"]
 
 # Mount elasticsearch.yml config
 ADD config/elasticsearch.yml /elasticsearch/config/elasticsearch.yml
 
 # Define working directory.
-WORKDIR /data
+WORKDIR /elastic
 
 # Define default command.
 CMD ["/elasticsearch/bin/elasticsearch"]
