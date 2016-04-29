@@ -1,29 +1,30 @@
-FROM nice/ld-docker-app
+FROM alpine
 MAINTAINER Ryan Roberts <ryansroberts@gmail.com>
 
-RUN apt-get update && apt-get install -yy default-jre wget
+ENV ELASTIC_VERSION 1.7.1
+ENV JAVA_VERSION 7.55.2.4.7-r0
 
-ENV ES_PKG_NAME elasticsearch-1.5.0
+RUN apk update && apk upgrade && \
+apk add --update curl ca-certificates
+RUN apk add --update openjdk7-jre-base
 
-# Install Elasticsearch.
 RUN \
-  cd / && \
-  wget https://download.elasticsearch.org/elasticsearch/elasticsearch/$ES_PKG_NAME.tar.gz && \
-  tar xvzf $ES_PKG_NAME.tar.gz && \
-  rm -f $ES_PKG_NAME.tar.gz && \
-  mv /$ES_PKG_NAME /elasticsearch
+  mkdir -p /opt && \
+  cd /tmp && \
+  curl https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-$ELASTIC_VERSION.tar.gz > elasticsearch-$ELASTIC_VERSION.tar.gz && \
+  tar -xzf elasticsearch-$ELASTIC_VERSION.tar.gz && \
+  rm -rf elasticsearch-$ELASTIC_VERSION.tar.gz && \
+  mv elasticsearch-$ELASTIC_VERSION /opt/elasticsearch
 
 # Define mountable directories.
 VOLUME ["/elastic"]
 
 # Mount elasticsearch.yml config
-ADD config/elasticsearch.yml /elasticsearch/config/elasticsearch.yml
-
-# Define working directory.
-WORKDIR /elastic
+ADD config/elasticsearch.yml /opt/elasticsearch/config/elasticsearch.yml
+#ADD ./start.sh /start.sh
 
 # Define default command.
-CMD ["/elasticsearch/bin/elasticsearch"]
+CMD ["/opt/elasticsearch/bin/elasticsearch"]
 
 # Expose ports.
 #   - 9200: HTTP
