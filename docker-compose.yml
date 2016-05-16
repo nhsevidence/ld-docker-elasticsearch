@@ -1,0 +1,13 @@
+elastic:
+  image: "${IMAGE_NAME}:${IMAGE_VERSION}"
+  ports:
+    - "9200:9200"
+  volumes_from:
+    - elasticdata
+  labels:
+    io.rancher.sidekicks: elasticdata
+elasticdata:
+  image: busybox:1.24.1
+  command: top
+  volumes:
+    - /elastic
