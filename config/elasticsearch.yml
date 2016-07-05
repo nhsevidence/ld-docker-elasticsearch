@@ -3,5 +3,3 @@ path:
   logs: /elastic/log
   plugins: /elastic/plugins
   work: /elastic/work
-  
-
